@@ -16,19 +16,15 @@ func PokedexRequestToModel(request *request.Pokedex) *model.Pokemon {
 	}
 }
 
-func TypeModelToResponse(model *model.Type) response.Type {
-	return response.Type{
-		ID:         model.ID,
-		FirstType:  model.FirstType,
-		SecondType: model.SecondType,
-	}
-}
-
 func PokedexModelToResponse(model *model.Pokemon) *response.Pokedex {
 	return &response.Pokedex{
 		Number: model.Number,
 		Name:   model.Name,
-		Type:   TypeModelToResponse(&model.PokemonType),
+		Type: response.Type{
+			ID:         model.PokemonType.ID,
+			FirstType:  model.PokemonType.FirstType,
+			SecondType: model.PokemonType.SecondType,
+		},
 	}
 }
 
