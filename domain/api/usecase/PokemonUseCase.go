@@ -18,7 +18,7 @@ func NewPokemonUseCase(pokemonPersistencePort spi.IPokemonPersistencePort, typeS
 }
 
 func (p PokemonUseCase) SavePokemon(pokemon *model.Pokemon) error {
-	err := p.pokemonPersistencePort.SavePokemon(pokemon)
+	err := p.pokemonPersistencePort.SavePokemonToDB(pokemon)
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func (p PokemonUseCase) SavePokemon(pokemon *model.Pokemon) error {
 }
 
 func (p PokemonUseCase) GetAllPokemons() ([]*model.Pokemon, error) {
-	pokemons, err := p.pokemonPersistencePort.GetAllPokemons()
+	pokemons, err := p.pokemonPersistencePort.GetAllPokemonsFromDB()
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (p PokemonUseCase) GetAllPokemons() ([]*model.Pokemon, error) {
 }
 
 func (p PokemonUseCase) GetPokemonByNumber(pokemonNumber int) (*model.Pokemon, error) {
-	pokemon, err := p.pokemonPersistencePort.GetPokemonByNumber(pokemonNumber)
+	pokemon, err := p.pokemonPersistencePort.GetPokemonByNumberFromDB(pokemonNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -60,13 +60,13 @@ func (p PokemonUseCase) UpdatePokemon(pokemon *model.Pokemon) error {
 	}
 
 	// Check if the type exists
-	_, err = p.typeServicePort.GetTypeById(pokemon.TypeId)
+	_, err = p.typeServicePort.GetTypeById(pokemon.PokemonType.ID)
 
 	if err != nil {
 		return err
 	}
 
-	err = p.pokemonPersistencePort.UpdatePokemon(pokemon)
+	err = p.pokemonPersistencePort.UpdatePokemonFromDB(pokemon)
 
 	if err != nil {
 		return err
@@ -83,7 +83,7 @@ func (p PokemonUseCase) DeletePokemon(pokemonNumber int) error {
 		return err
 	}
 
-	err = p.pokemonPersistencePort.DeletePokemon(pokemonNumber)
+	err = p.pokemonPersistencePort.DeletePokemonFromDB(pokemonNumber)
 
 	if err != nil {
 		return err
