@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"github.com/redooz/podekex-hexagonal-architecture/domain/api"
 	"github.com/redooz/podekex-hexagonal-architecture/domain/constants"
 	domainError "github.com/redooz/podekex-hexagonal-architecture/domain/error"
 	"github.com/redooz/podekex-hexagonal-architecture/domain/model"
@@ -9,10 +10,11 @@ import (
 
 type PokemonUseCase struct {
 	pokemonPersistencePort spi.IPokemonPersistencePort
+	typeServicePort        api.ITypeServicePort
 }
 
-func NewPokemonUseCase(pokemonPersistencePort spi.IPokemonPersistencePort) *PokemonUseCase {
-	return &PokemonUseCase{pokemonPersistencePort: pokemonPersistencePort}
+func NewPokemonUseCase(pokemonPersistencePort spi.IPokemonPersistencePort, typeServicePort api.ITypeServicePort) *PokemonUseCase {
+	return &PokemonUseCase{pokemonPersistencePort: pokemonPersistencePort, typeServicePort: typeServicePort}
 }
 
 func (p PokemonUseCase) SavePokemon(pokemon *model.Pokemon) error {
@@ -52,6 +54,13 @@ func (p PokemonUseCase) GetPokemonByNumber(pokemonNumber int) (*model.Pokemon, e
 func (p PokemonUseCase) UpdatePokemon(pokemon *model.Pokemon) error {
 	// Check if the pokemon exists
 	_, err := p.GetPokemonByNumber(pokemon.Number)
+
+	if err != nil {
+		return err
+	}
+
+	// Check if the type exists
+	_, err = p.typeServicePort.GetTypeById(pokemon.TypeId)
 
 	if err != nil {
 		return err
