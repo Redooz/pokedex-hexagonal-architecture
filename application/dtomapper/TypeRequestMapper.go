@@ -1,4 +1,4 @@
-package mapper
+package dtomapper
 
 import (
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/request"

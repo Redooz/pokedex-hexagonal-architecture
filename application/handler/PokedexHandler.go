@@ -5,7 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/request"
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/response"
-	"github.com/redooz/podekex-hexagonal-architecture/application/mapper"
+	"github.com/redooz/podekex-hexagonal-architecture/application/dtomapper"
 	"github.com/redooz/podekex-hexagonal-architecture/domain/api"
 	domainError "github.com/redooz/podekex-hexagonal-architecture/domain/error"
 	"net/http"
@@ -30,7 +30,7 @@ func (p PokedexHandler) SavePokemonToPokedex(pokedex *request.Pokedex) (httpStat
 		return http.StatusBadRequest, validationErrors
 	}
 
-	err = p.pokemonServicePort.SavePokemon(mapper.PokedexRequestToModel(pokedex))
+	err = p.pokemonServicePort.SavePokemon(dtomapper.PokedexRequestToModel(pokedex))
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
@@ -50,7 +50,7 @@ func (p PokedexHandler) GetAllPokemonFromPokedex() (response []*response.Pokedex
 		return nil, http.StatusNotFound, noDataFound
 	}
 
-	return mapper.SlicePokemonModelToSliceResponse(pokedex), http.StatusOK, nil
+	return dtomapper.SlicePokemonModelToSliceResponse(pokedex), http.StatusOK, nil
 }
 
 func (p PokedexHandler) GetPokemonFromPokedexByNumber(pokedexNumber int) (response *response.Pokedex, httpStatus int, err error) {
@@ -65,7 +65,7 @@ func (p PokedexHandler) GetPokemonFromPokedexByNumber(pokedexNumber int) (respon
 		return nil, http.StatusNotFound, noDataFound
 	}
 
-	return mapper.PokedexModelToResponse(pokemon), http.StatusOK, nil
+	return dtomapper.PokedexModelToResponse(pokemon), http.StatusOK, nil
 }
 
 func (p PokedexHandler) UpdatePokemonInPokedex(pokedex *request.Pokedex, number int) (httpStatus int, err error) {
@@ -78,7 +78,7 @@ func (p PokedexHandler) UpdatePokemonInPokedex(pokedex *request.Pokedex, number 
 		return http.StatusBadRequest, validationErrors
 	}
 
-	err = p.pokemonServicePort.UpdatePokemon(mapper.PokedexRequestToModel(pokedex), number)
+	err = p.pokemonServicePort.UpdatePokemon(dtomapper.PokedexRequestToModel(pokedex), number)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}

@@ -5,7 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/request"
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/response"
-	"github.com/redooz/podekex-hexagonal-architecture/application/mapper"
+	"github.com/redooz/podekex-hexagonal-architecture/application/dtomapper"
 	"github.com/redooz/podekex-hexagonal-architecture/domain/api"
 	domainError "github.com/redooz/podekex-hexagonal-architecture/domain/error"
 	"net/http"
@@ -29,7 +29,7 @@ func (t TypeHandler) CreatePokemonType(pokemonType *request.Type) (httpStatus in
 		return http.StatusBadRequest, validationErrors
 	}
 
-	err = t.typeServicePort.SaveType(mapper.TypeRequestToModel(pokemonType))
+	err = t.typeServicePort.SaveType(dtomapper.TypeRequestToModel(pokemonType))
 
 	if err != nil {
 		return http.StatusInternalServerError, err
@@ -50,7 +50,7 @@ func (t TypeHandler) GetAllPokemonTypes() (response []*response.Type, httpStatus
 		return nil, http.StatusNotFound, nil
 	}
 
-	return mapper.SliceTypeModelToSliceResponse(types), http.StatusOK, nil
+	return dtomapper.SliceTypeModelToSliceResponse(types), http.StatusOK, nil
 }
 
 func (t TypeHandler) GetPokemonTypeByID(typeID int) (response *response.Type, httpStatus int, err error) {
@@ -65,7 +65,7 @@ func (t TypeHandler) GetPokemonTypeByID(typeID int) (response *response.Type, ht
 		return nil, http.StatusNotFound, nil
 	}
 
-	return mapper.TypeModelToResponse(pokemonType), http.StatusOK, nil
+	return dtomapper.TypeModelToResponse(pokemonType), http.StatusOK, nil
 }
 
 func (t TypeHandler) UpdatePokemonType(pokemonType *request.Type, typeID int) (httpStatus int, err error) {
@@ -78,7 +78,7 @@ func (t TypeHandler) UpdatePokemonType(pokemonType *request.Type, typeID int) (h
 		return http.StatusBadRequest, validationErrors
 	}
 
-	err = t.typeServicePort.UpdateType(mapper.TypeRequestToModel(pokemonType), typeID)
+	err = t.typeServicePort.UpdateType(dtomapper.TypeRequestToModel(pokemonType), typeID)
 
 	if err != nil {
 		return http.StatusInternalServerError, err
