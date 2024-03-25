@@ -3,9 +3,9 @@ package spi
 import "github.com/redooz/podekex-hexagonal-architecture/domain/model"
 
 type ITypePersistencePort interface {
-	SaveType(pokemonType *model.Type) error
-	GetAllTypes() ([]*model.Type, error)
-	GetTypeById(typeId int) (*model.Type, error)
-	UpdateType(pokemonType *model.Type) error
-	DeleteType(typeId int) error
+	SaveTypeToDB(pokemonType *model.Type) error
+	GetAllTypesFromDB() ([]*model.Type, error)
+	GetTypeByIdFromDB(typeId int) (*model.Type, error)
+	UpdateTypeFromDB(pokemonType *model.Type, typeId int) error
+	DeleteTypeFromDB(typeId int) error
 }

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"github.com/go-playground/validator/v10"
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/request"
 	"github.com/redooz/podekex-hexagonal-architecture/application/dto/response"
 	"github.com/redooz/podekex-hexagonal-architecture/application/mapper"
@@ -19,6 +20,15 @@ func NewTypeHandler(typeServicePort api.ITypeServicePort) *TypeHandler {
 }
 
 func (t TypeHandler) CreatePokemonType(pokemonType *request.Type) (httpStatus int, err error) {
+	validate := validator.New()
+
+	err = validate.Struct(pokemonType)
+
+	var validationErrors validator.ValidationErrors
+	if errors.As(err, &validationErrors) {
+		return http.StatusBadRequest, validationErrors
+	}
+
 	err = t.typeServicePort.SaveType(mapper.TypeRequestToModel(pokemonType))
 
 	if err != nil {
@@ -58,8 +68,17 @@ func (t TypeHandler) GetPokemonTypeByID(typeID int) (response *response.Type, ht
 	return mapper.TypeModelToResponse(pokemonType), http.StatusOK, nil
 }
 
-func (t TypeHandler) UpdatePokemonType(pokemonType *request.Type) (httpStatus int, err error) {
-	err = t.typeServicePort.UpdateType(mapper.TypeRequestToModel(pokemonType))
+func (t TypeHandler) UpdatePokemonType(pokemonType *request.Type, typeID int) (httpStatus int, err error) {
+	validate := validator.New()
+
+	err = validate.Struct(pokemonType)
+
+	var validationErrors validator.ValidationErrors
+	if errors.As(err, &validationErrors) {
+		return http.StatusBadRequest, validationErrors
+	}
+
+	err = t.typeServicePort.UpdateType(mapper.TypeRequestToModel(pokemonType), typeID)
 
 	if err != nil {
 		return http.StatusInternalServerError, err
