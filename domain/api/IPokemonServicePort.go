@@ -6,6 +6,6 @@ type IPokemonServicePort interface {
 	SavePokemon(pokemon *model.Pokemon) error
 	GetAllPokemons() ([]*model.Pokemon, error)
 	GetPokemonByNumber(pokemonNumber int) (*model.Pokemon, error)
-	UpdatePokemon(pokemon *model.Pokemon) error
+	UpdatePokemon(pokemon *model.Pokemon, number int) error
 	DeletePokemon(pokemonNumber int) error
 }

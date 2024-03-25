@@ -51,9 +51,9 @@ func (p PokemonUseCase) GetPokemonByNumber(pokemonNumber int) (*model.Pokemon, e
 	return pokemon, nil
 }
 
-func (p PokemonUseCase) UpdatePokemon(pokemon *model.Pokemon) error {
+func (p PokemonUseCase) UpdatePokemon(pokemon *model.Pokemon, number int) error {
 	// Check if the pokemon exists
-	_, err := p.GetPokemonByNumber(pokemon.Number)
+	_, err := p.GetPokemonByNumber(number)
 
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func (p PokemonUseCase) UpdatePokemon(pokemon *model.Pokemon) error {
 		return err
 	}
 
-	err = p.pokemonPersistencePort.UpdatePokemonFromDB(pokemon)
+	err = p.pokemonPersistencePort.UpdatePokemonFromDB(pokemon, number)
 
 	if err != nil {
 		return err
