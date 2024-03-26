@@ -16,6 +16,14 @@ func NewPokedexController(pokedexHandler handler.IPokedexHandler) *PokedexContro
 	return &PokedexController{pokedexHandler: pokedexHandler}
 }
 
+func (p *PokedexController) InitRoutes(router *gin.Engine) {
+	router.POST("/pokedex", p.SavePokemonToPokedex)
+	router.GET("/pokedex", p.GetAllPokemonFromPokedex)
+	router.GET("/pokedex/:number", p.GetPokemonFromPokedexByNumber)
+	router.PUT("/pokedex/:number", p.UpdatePokemonInPokedex)
+	router.DELETE("/pokedex/:number", p.DeletePokemonFromPokedex)
+}
+
 func (p *PokedexController) SavePokemonToPokedex(c *gin.Context) {
 	var body request.Pokedex
 

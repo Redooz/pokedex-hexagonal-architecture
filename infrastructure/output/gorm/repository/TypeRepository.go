@@ -5,11 +5,15 @@ import (
 	"github.com/redooz/podekex-hexagonal-architecture/infrastructure/output/gorm/entity"
 )
 
-type Type struct {
+type TypeRepository struct {
 	Database *gorm.Database
 }
 
-func (t Type) Save(pokemonType *entity.Type) error {
+func NewTypeRepository(database *gorm.Database) *TypeRepository {
+	return &TypeRepository{Database: database}
+}
+
+func (t TypeRepository) Save(pokemonType *entity.Type) error {
 	result := t.Database.DB.Create(pokemonType)
 
 	if result.Error != nil {
@@ -19,7 +23,7 @@ func (t Type) Save(pokemonType *entity.Type) error {
 	return nil
 }
 
-func (t Type) GetAll() ([]*entity.Type, error) {
+func (t TypeRepository) GetAll() ([]*entity.Type, error) {
 	var pokemonTypes []*entity.Type
 
 	result := t.Database.DB.Find(&pokemonTypes)
@@ -31,7 +35,7 @@ func (t Type) GetAll() ([]*entity.Type, error) {
 	return pokemonTypes, nil
 }
 
-func (t Type) GetById(typeId int) (*entity.Type, error) {
+func (t TypeRepository) GetById(typeId int) (*entity.Type, error) {
 	var pokemonType entity.Type
 
 	result := t.Database.DB.Where(&entity.Type{ID: typeId}).First(&pokemonType)
@@ -43,7 +47,7 @@ func (t Type) GetById(typeId int) (*entity.Type, error) {
 	return &pokemonType, nil
 }
 
-func (t Type) Update(pokemonType *entity.Type, typeId int) error {
+func (t TypeRepository) Update(pokemonType *entity.Type, typeId int) error {
 	// Check if the type exists
 	_, err := t.GetById(typeId)
 
@@ -60,7 +64,7 @@ func (t Type) Update(pokemonType *entity.Type, typeId int) error {
 	return nil
 }
 
-func (t Type) Delete(typeId int) error {
+func (t TypeRepository) Delete(typeId int) error {
 	// Check if the type exists
 	_, err := t.GetById(typeId)
 

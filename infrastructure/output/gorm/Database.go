@@ -18,14 +18,14 @@ type ConnectionValues struct {
 
 type Database struct {
 	DB               *gorm.DB
-	connectionValues ConnectionValues
+	connectionValues *ConnectionValues
 	entities         []interface{}
 }
 
 var instance *Database
 var once sync.Once
 
-func NewDatabase(connectionValues ConnectionValues, entities []interface{}) *Database {
+func NewDatabase(connectionValues *ConnectionValues, entities []interface{}) *Database {
 	once.Do(func() {
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", connectionValues.User, connectionValues.Password, connectionValues.Host, connectionValues.Port, connectionValues.DatabaseName)
 

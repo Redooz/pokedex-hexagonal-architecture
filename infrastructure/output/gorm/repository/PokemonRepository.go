@@ -5,11 +5,15 @@ import (
 	"github.com/redooz/podekex-hexagonal-architecture/infrastructure/output/gorm/entity"
 )
 
-type Pokemon struct {
+type PokemonRepository struct {
 	Database *gorm.Database
 }
 
-func (p Pokemon) Save(pokemon *entity.Pokemon) error {
+func NewPokemonRepository(database *gorm.Database) *PokemonRepository {
+	return &PokemonRepository{Database: database}
+}
+
+func (p PokemonRepository) Save(pokemon *entity.Pokemon) error {
 	result := p.Database.DB.Create(pokemon)
 
 	if result.Error != nil {
@@ -19,7 +23,7 @@ func (p Pokemon) Save(pokemon *entity.Pokemon) error {
 	return nil
 }
 
-func (p Pokemon) GetAll() ([]*entity.Pokemon, error) {
+func (p PokemonRepository) GetAll() ([]*entity.Pokemon, error) {
 	var pokemons []*entity.Pokemon
 
 	result := p.Database.DB.Find(&pokemons)
@@ -31,7 +35,7 @@ func (p Pokemon) GetAll() ([]*entity.Pokemon, error) {
 	return pokemons, nil
 }
 
-func (p Pokemon) GetByNumber(pokemonNumber int) (*entity.Pokemon, error) {
+func (p PokemonRepository) GetByNumber(pokemonNumber int) (*entity.Pokemon, error) {
 	var pokemon entity.Pokemon
 
 	result := p.Database.DB.Where(&entity.Pokemon{Number: pokemonNumber}).First(&pokemon)
@@ -43,7 +47,7 @@ func (p Pokemon) GetByNumber(pokemonNumber int) (*entity.Pokemon, error) {
 	return &pokemon, nil
 }
 
-func (p Pokemon) Update(pokemon *entity.Pokemon, number int) error {
+func (p PokemonRepository) Update(pokemon *entity.Pokemon, number int) error {
 	// Check if the pokemon exists
 	_, err := p.GetByNumber(number)
 
@@ -60,7 +64,7 @@ func (p Pokemon) Update(pokemon *entity.Pokemon, number int) error {
 	return nil
 }
 
-func (p Pokemon) Delete(pokemonNumber int) error {
+func (p PokemonRepository) Delete(pokemonNumber int) error {
 	// Check if the pokemon exists
 	_, err := p.GetByNumber(pokemonNumber)
 

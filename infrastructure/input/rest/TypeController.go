@@ -16,6 +16,14 @@ func NewTypeController(typeHandler handler.ITypeHandler) *TypeController {
 	return &TypeController{typeHandler: typeHandler}
 }
 
+func (t *TypeController) InitRoutes(router *gin.Engine) {
+	router.POST("/type", t.SaveType)
+	router.GET("/type", t.GetAllTypes)
+	router.GET("/type/:id", t.GetTypeByID)
+	router.PUT("/type/:id", t.UpdateType)
+	router.DELETE("/type/:id", t.DeleteType)
+}
+
 func (t *TypeController) SaveType(c *gin.Context) {
 	var body request.Type
 

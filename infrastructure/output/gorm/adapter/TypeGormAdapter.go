@@ -7,10 +7,10 @@ import (
 )
 
 type TypePersistenceAdapter struct {
-	Repository repository.Type
+	Repository *repository.TypeRepository
 }
 
-func NewTypePersistenceAdapter(repository repository.Type) *TypePersistenceAdapter {
+func NewTypePersistenceAdapter(repository *repository.TypeRepository) *TypePersistenceAdapter {
 	return &TypePersistenceAdapter{Repository: repository}
 }
 

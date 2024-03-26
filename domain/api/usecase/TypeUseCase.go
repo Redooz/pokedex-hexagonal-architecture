@@ -8,15 +8,15 @@ import (
 )
 
 type TypeUseCase struct {
-	typePersincePort spi.ITypePersistencePort
+	typePersistencePort spi.ITypePersistencePort
 }
 
 func NewTypeUseCase(typePersincePort spi.ITypePersistencePort) *TypeUseCase {
-	return &TypeUseCase{typePersincePort: typePersincePort}
+	return &TypeUseCase{typePersistencePort: typePersincePort}
 }
 
 func (t TypeUseCase) SaveType(pokemonType *model.Type) error {
-	err := t.typePersincePort.SaveTypeToDB(pokemonType)
+	err := t.typePersistencePort.SaveTypeToDB(pokemonType)
 
 	if err != nil {
 		return err
@@ -26,7 +26,7 @@ func (t TypeUseCase) SaveType(pokemonType *model.Type) error {
 }
 
 func (t TypeUseCase) GetAllTypes() ([]*model.Type, error) {
-	types, err := t.typePersincePort.GetAllTypesFromDB()
+	types, err := t.typePersistencePort.GetAllTypesFromDB()
 
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (t TypeUseCase) GetAllTypes() ([]*model.Type, error) {
 }
 
 func (t TypeUseCase) GetTypeById(typeId int) (*model.Type, error) {
-	pokemonType, err := t.typePersincePort.GetTypeByIdFromDB(typeId)
+	pokemonType, err := t.typePersistencePort.GetTypeByIdFromDB(typeId)
 
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (t TypeUseCase) UpdateType(pokemonType *model.Type, typeId int) error {
 		return err
 	}
 
-	err = t.typePersincePort.UpdateTypeFromDB(pokemonType, typeId)
+	err = t.typePersistencePort.UpdateTypeFromDB(pokemonType, typeId)
 
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func (t TypeUseCase) DeleteType(typeId int) error {
 		return err
 	}
 
-	err = t.typePersincePort.DeleteTypeFromDB(typeId)
+	err = t.typePersistencePort.DeleteTypeFromDB(typeId)
 
 	if err != nil {
 		return err

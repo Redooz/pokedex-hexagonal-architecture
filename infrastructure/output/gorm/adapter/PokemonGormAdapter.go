@@ -7,10 +7,10 @@ import (
 )
 
 type PokemonPersistenceAdapter struct {
-	Repository repository.Pokemon
+	Repository *repository.PokemonRepository
 }
 
-func NewPokemonPersistenceAdapter(repository repository.Pokemon) *PokemonPersistenceAdapter {
+func NewPokemonPersistenceAdapter(repository *repository.PokemonRepository) *PokemonPersistenceAdapter {
 	return &PokemonPersistenceAdapter{Repository: repository}
 }
 
